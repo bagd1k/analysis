@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas
 
 
@@ -42,7 +42,7 @@ districts = region[['район' in name for name in list(region['Name'])]]  # �
 region = region[['сельсовет' not in name and 'район' not in name for name in list(region['Name'])]]
 # Фрейм без муниципальных укрупнений
 districts['Name'] = districts['Name'].apply(lambda x: x.split(' район')[0])  # Слегка обрезаем имена для районов
-populationPercents = makePercentageList(list(districts['Population']))   # Процент населения
+populationPercents = makePercentageList(list(districts['Population']))  # Процент населения
 shopsPercent = makePercentageList(list(districts['ShopsAll']))  # Процент магазинов
 coefficient = [i / j for i, j in zip(populationPercents, shopsPercent)]  # Высчитываем коэффициент
 condition = (region['Delivery'] == 0) & (region['ShopsGoods'] == 0) & (region['BoutiqueGoods'] == 0)
@@ -67,5 +67,5 @@ showGraph(districts['Name'].apply(lambda x: x[:3]), boutiqueDensityByDistricts, 
 showGraph(districts['Name'].apply(lambda x: x[:3]), shopDensityByDistricts, 'Районы', 'Плотность магазинов',
           title=f'Среднее: {round(np.mean(shopDensityByDistricts), 4)}')
 showGraph([0, len(needsShop), len(needsBoutique), len(needsDelivery)],
-          ['', 'В магазинах', 'В киосках', 'В приезжающих'], '', 'Тип', title='Количество нуждающихся поселков', width=15)
-
+          ['', 'В магазинах', 'В киосках', 'В приезжающих'], '', 'Тип',
+          title='Количество нуждающихся поселков', width=15)
