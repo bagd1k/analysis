@@ -18,7 +18,7 @@ def makePercentageList(beginningList):  # Создаём лист процент
 def showPieGraph(listToShow, nameList, title):  # Отрисовываем круговой граф
     fig1, ax1 = plt.subplots()
     plt.title(title)
-    ax1.pie(listToShow, labels=nameList, autopct='%.1f', radius=0.8, pctdistance=0.7)
+    ax1.pie(sorted(listToShow), labels=nameList, autopct='%.1f', radius=0.8, pctdistance=0.7)
     centre_circle = plt.Circle((0, 0), 0.65, fc='white')
     fig = plt.gcf()
     fig.gca().add_artist(centre_circle)
@@ -27,12 +27,12 @@ def showPieGraph(listToShow, nameList, title):  # Отрисовываем кр�
     plt.show()
 
 
-def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8, size=30, height=12, showBarLabel=True):  # Отрисовываем гистограмму
+def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8, size=28, height=15, showBarLabel=True):  # Отрисовываем гистограмму
     plt.figure(figsize=(size, height))
     plt.title(title)
     plt.xlabel(xTitle)
     plt.ylabel(yTitle)
-    bar = plt.bar(xAxis, list(map(lambda x: round(x, 4) if type(x) is not str else x, yAxis)), width=width)
+    bar = plt.bar(xAxis, sorted(list(map(lambda x: round(x, 4) if type(x) is not str else x, yAxis))), width=width)
     if showBarLabel:
         plt.bar_label(bar)
     plt.show()
