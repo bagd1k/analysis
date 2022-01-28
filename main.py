@@ -36,7 +36,7 @@ def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8):  #
     plt.show()
 
 
-region = pandas.read_excel(r'C:\Users\Bagd\Downloads\Telegram Desktop\Dataset.xlsx', skiprows=5)  # Читаем датасет
+region = pandas.read_excel(r'Dataset.xlsx', skiprows=5)  # Читаем датасет
 region.replace([np.NAN, ' '], 0, inplace=True)  # Немного нормализуем
 districts = region[['район' in name for name in list(region['Name'])]]  # Отдельный фрейм для районов
 region = region[['сельсовет' not in name and 'район' not in name for name in list(region['Name'])]]
