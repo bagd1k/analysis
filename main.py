@@ -50,6 +50,7 @@ condition = (region['Delivery'] == 0) & (region['ShopsGoods'] == 0) & (region['B
 needsDelivery = region[condition & (region['Population'] <= 100) & (region['Population'] > 0)]
 needsBoutique = region[condition & (region['Population'] > 100) & (region['Population'] < 500)]
 needsShop = region[condition & (region['Population'] > 500)]
+boutiqueDensityByDistricts = districts['BoutiqueAll'] / districts['Population']  # Небольшое исследование плотности
 
 
 showPieGraph(districts['Population'], districts['Name'], 'Процент населения по районам от общего')
@@ -59,6 +60,8 @@ showGraph(districts['Name'].apply(lambda x: x[:3]), coefficient,
           'Районы', 'Отношение кол-ва населения к магазинам', title=f'Среднее: {round(np.mean(coefficient), 2)}')
 showGraph(districts['Name'].apply(lambda x: x[:3]), districts['ShopsAll'], 'Районы', 'Магазины')
 showGraph(districts['Name'].apply(lambda x: x[:3]), districts['BoutiqueAll'], 'Районы', 'Киоски')
+showGraph(districts['Name'].apply(lambda x: x[:3]), boutiqueDensityByDistricts, 'Районы', 'Плотность',
+          title=f'Среднее: {round(np.mean(boutiqueDensityByDistricts), 4)}')
 showGraph([0, len(needsShop), len(needsBoutique), len(needsDelivery)],
           ['', 'В магазинах', 'В киосках', 'В приезжающих'], 'Количество нуждающихся поселков', 'Тип', width=15)
 
