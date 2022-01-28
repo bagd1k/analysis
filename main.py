@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import pandas
 
 
-def percentage(percent, whole):
+def percentage(percent, whole):  # считаем % от общего
     return (percent / whole) * 100.0
 
 
-def makePercentageList(beginningList):
+def makePercentageList(beginningList):  # Создаём лист процентов из листа значений
     newList = []
     sumOfAList = sum(beginningList)
     for i in range(len(beginningList)):
@@ -15,7 +15,7 @@ def makePercentageList(beginningList):
     return newList
 
 
-def showPieGraph(listToShow, nameList, title):
+def showPieGraph(listToShow, nameList, title):  # Отрисовываем круговой граф
     fig1, ax1 = plt.subplots()
     plt.title(title)
     ax1.pie(listToShow, labels=nameList, autopct='%.1f', radius=0.8, pctdistance=0.7)
@@ -27,7 +27,7 @@ def showPieGraph(listToShow, nameList, title):
     plt.show()
 
 
-def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8):
+def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8):  # Отрисовываем гистограмму
     plt.figure(figsize=(10.5, 6))
     plt.title(title)
     plt.xlabel(xTitle)
@@ -59,7 +59,6 @@ showGraph(districts['Name'].apply(lambda x: x[:3]), coefficient,
           'Районы', 'Отношение кол-ва населения к магазинам', title=f'Среднее: {round(np.mean(coefficient), 2)}')
 showGraph(districts['Name'].apply(lambda x: x[:3]), districts['ShopsAll'], 'Районы', 'Магазины')
 showGraph(districts['Name'].apply(lambda x: x[:3]), districts['BoutiqueAll'], 'Районы', 'Киоски')
-
 showGraph([0, len(needsShop), len(needsBoutique), len(needsDelivery)],
           ['', 'В магазинах', 'В киосках', 'В приезжающих'], 'Количество нуждающихся поселков', 'Тип', width=15)
 
