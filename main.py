@@ -27,12 +27,14 @@ def showPieGraph(listToShow, nameList, title):  # Отрисовываем кр�
     plt.show()
 
 
-def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8):  # Отрисовываем гистограмму
-    plt.figure(figsize=(10.5, 6))
+def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8, size=30, height=12, showBarLabel=True):  # Отрисовываем гистограмму
+    plt.figure(figsize=(size, height))
     plt.title(title)
     plt.xlabel(xTitle)
     plt.ylabel(yTitle)
-    plt.bar(xAxis, yAxis, width=width)
+    bar = plt.bar(xAxis, list(map(lambda x: round(x, 4) if type(x) is not str else x, yAxis)), width=width)
+    if showBarLabel:
+        plt.bar_label(bar)
     plt.show()
 
 
@@ -56,16 +58,16 @@ shopDensityByDistricts = districts['ShopsAll'] / districts['Population']
 showPieGraph(districts['Population'], districts['Name'], 'Процент населения по районам от общего')
 showPieGraph(districts['BoutiqueAll'], districts['Name'], 'Процент киосков по районам от общего')
 showPieGraph(districts['ShopsAll'], districts['Name'], 'Процент магазинов по районам от общего')
-showGraph(districts['Name'].apply(lambda x: x[:3]), coefficient,
+showGraph(districts['Name'], coefficient,
           'Районы', 'Отношение кол-ва населения к магазинам', title=f'Среднее: {round(np.mean(coefficient), 2)}')
-showGraph(districts['Name'].apply(lambda x: x[:3]), districts['ShopsAll'],
+showGraph(districts['Name'], districts['ShopsAll'],
           'Районы', 'Магазины', title=f"Среднее: {round(np.mean(districts['ShopsAll']))}")
-showGraph(districts['Name'].apply(lambda x: x[:3]), districts['BoutiqueAll'],
+showGraph(districts['Name'], districts['BoutiqueAll'],
           'Районы', 'Киоски', title=f"Среднее: {round(np.mean(districts['BoutiqueAll']))}")
-showGraph(districts['Name'].apply(lambda x: x[:3]), boutiqueDensityByDistricts, 'Районы', 'Плотность киосков',
+showGraph(districts['Name'], boutiqueDensityByDistricts, 'Районы', 'Плотность киосков',
           title=f'Среднее: {round(np.mean(boutiqueDensityByDistricts), 4)}')
-showGraph(districts['Name'].apply(lambda x: x[:3]), shopDensityByDistricts, 'Районы', 'Плотность магазинов',
+showGraph(districts['Name'], shopDensityByDistricts, 'Районы', 'Плотность магазинов',
           title=f'Среднее: {round(np.mean(shopDensityByDistricts), 4)}')
 showGraph([0, len(needsShop), len(needsBoutique), len(needsDelivery)],
           ['', 'В магазинах', 'В киосках', 'В приезжающих'], '', 'Тип',
-          title='Количество нуждающихся поселков', width=15)
+          title='Количество нуждающихся поселков', width=15, size=10, height=6, showBarLabel=False)
