@@ -7,6 +7,11 @@ def percentage(percent, whole):  # считаем % от общего
     return (percent / whole) * 100.0
 
 
+def zipAndSort(keys, values):
+    x = dict(zip(keys, values))
+    return {k: v for k, v in sorted(x.items(), key=lambda item: item[1])}
+
+
 def makePercentageList(beginningList):  # Создаём лист процентов из листа значений
     newList = []
     sumOfAList = sum(beginningList)
@@ -18,7 +23,8 @@ def makePercentageList(beginningList):  # Создаём лист процент
 def showPieGraph(listToShow, nameList, title):  # Отрисовываем круговой граф
     fig1, ax1 = plt.subplots()
     plt.title(title)
-    ax1.pie(sorted(listToShow), labels=nameList, autopct='%.1f', radius=0.8, pctdistance=0.7)
+    dictionary = zipAndSort(nameList, listToShow)
+    ax1.pie(dictionary.values(), labels=dictionary.keys(), autopct='%.1f', radius=0.8, pctdistance=0.7)
     centre_circle = plt.Circle((0, 0), 0.65, fc='white')
     fig = plt.gcf()
     fig.gca().add_artist(centre_circle)
@@ -27,12 +33,19 @@ def showPieGraph(listToShow, nameList, title):  # Отрисовываем кр�
     plt.show()
 
 
-def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8, size=28, height=15, showBarLabel=True):  # Отрисовываем гистограмму
+def showGraph(xAxis, yAxis, xTitle, yTitle, title='График', width=0.8, size=28, height=15, showBarLabel=True,
+              needsSort=True):
+    # Отрисовываем диаграмму
     plt.figure(figsize=(size, height))
     plt.title(title)
     plt.xlabel(xTitle)
     plt.ylabel(yTitle)
-    bar = plt.bar(xAxis, sorted(list(map(lambda x: round(x, 4) if type(x) is not str else x, yAxis))), width=width)
+    if needsSort:
+        dictionary = zipAndSort(xAxis, yAxis)
+        bar = plt.bar(dictionary.keys(), list(map(lambda x: round(x, 4) if type(x) != str else x, dictionary.values())),
+                      width=width)
+    else:
+        bar = plt.bar(xAxis, yAxis, width=width)
     if showBarLabel:
         plt.bar_label(bar)
     plt.show()
@@ -70,4 +83,4 @@ showGraph(districts['Name'], shopDensityByDistricts, 'Районы', 'Плотн
           title=f'Среднее: {round(np.mean(shopDensityByDistricts), 4)}')
 showGraph([0, len(needsShop), len(needsBoutique), len(needsDelivery)],
           ['', 'В магазинах', 'В киосках', 'В приезжающих'], '', 'Тип',
-          title='Количество нуждающихся поселков', width=15, size=10, height=6, showBarLabel=False)
+          title='Количество нуждающихся поселков', width=15, size=10, height=6, showBarLabel=False, needsSort=False)
