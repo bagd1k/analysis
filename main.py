@@ -13,16 +13,12 @@ def zipAndSort(keys, values):
 
 
 def makePercentageList(beginningList):  # Создаём лист процентов из листа значений
-    newList = []
     sumOfAList = sum(beginningList)
-    for i in range(len(beginningList)):
-        newList.append(round(percentage(beginningList[i], sumOfAList), 2))
-    return newList
+    return list(map(lambda x: round(percentage(x, sumOfAList), 2), beginningList))
 
 
 def showPieGraph(listToShow, nameList, title):  # Отрисовываем круговой граф
     fig1, ax1 = plt.subplots()
-    plt.title(title)
     dictionary = zipAndSort(nameList, listToShow)
     ax1.pie(dictionary.values(), labels=dictionary.keys(), autopct='%.1f', radius=0.8, pctdistance=0.7)
     centre_circle = plt.Circle((0, 0), 0.65, fc='white')
@@ -59,7 +55,7 @@ region = region[['сельсовет' not in name and 'район' not in name f
 districts['Name'] = districts['Name'].apply(lambda x: x.split(' район')[0])  # Слегка обрезаем имена для районов
 populationPercents = makePercentageList(list(districts['Population']))  # Процент населения
 shopsPercent = makePercentageList(list(districts['ShopsAll']))  # Процент магазинов
-boutiquesPercent = makePercentageList(list(districts['BoutiqueAll']))  # Процент магазинов
+boutiquesPercent = makePercentageList(list(districts['BoutiqueAll']))  # Процент киосков
 coefficientShops = [i / j for i, j in zip(shopsPercent, populationPercents)]  # Высчитываем коэффициент для магазинов
 coefficientBoutiques = [i / j for i, j in zip(boutiquesPercent, populationPercents)]  # И для киосков
 condition = (region['Delivery'] == 0) & (region['ShopsGoods'] == 0) & (region['BoutiqueGoods'] == 0)
@@ -70,9 +66,12 @@ needsShop = region[condition & (region['Population'] > 500)]
 boutiqueDensityByDistricts = districts['Population'] / districts['BoutiqueAll']  # Небольшое исследование плотности
 shopDensityByDistricts = districts['Population'] / districts['ShopsAll']
 
-showPieGraph(districts['Population'], districts['Name'], 'Процент населения по районам от общего (без г. Липецка)')
-showPieGraph(districts['BoutiqueAll'], districts['Name'], 'Процент киосков по районам от общего (без г. Липецка)')
-showPieGraph(districts['ShopsAll'], districts['Name'], 'Процент магазинов по районам от общего (без г. Липецка)')
+showPieGraph(districts['Population'], districts['Name'],
+             'Процент населения по районам от общего (без г. Липецка и Ельца)')
+showPieGraph(districts['BoutiqueAll'], districts['Name'],
+             'Процент киосков по районам от общего (без г. Липецка и Ельца)')
+showPieGraph(districts['ShopsAll'], districts['Name'],
+             'Процент магазинов по районам от общего (без г. Липецка и Ельца)')
 showGraph(districts['Name'], coefficientShops,
           'Районы', 'Коэффициент процентного отношения магазинов к населению',
           title=f'Среднее: {round(np.mean(coefficientShops), 2)}')
